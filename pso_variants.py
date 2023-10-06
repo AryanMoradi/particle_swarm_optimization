@@ -7,7 +7,6 @@ class PSO:
 
     def optimize(self):
         pass
-    testing
 
 
 class PSOInertiaWeightAdjustment(PSO):
