@@ -21,11 +21,13 @@ class PSO:
         self.problem = problem
         self.num_particles = num_particles
         self.max_iterations = max_iterations
-        self.topology = topology
 
     def optimize(self):
         #for each time step t
         for _ in range(self.max_iterations):
+            #initialize random topology
+            if topology.type == "rand":
+                topology.update(self.problem)
             for particle in range(self.num_particles):
                 #update position and velocity
                 self.update(particle)
@@ -38,12 +40,14 @@ class PSO:
                     self.problem[particle].best_position = fitness
 
                 #update neighbour fitness if better
-                for neighbour in self.topology[particle]:
+                for neighbour in topology.neighbour_list[particle]:
                     fitness = get_fitness(self.problem[neighbour])
                     if fitness > self.problem[particle].best_neighbour_position:
                         self.problem[particle].best_neighbour_position = fitness
 
-            #break if terminating condition is met
+            #update if star topology
+            if topology.type == "star":
+                topology.update(self.problem)
 
 
     def update(self, particle_index):
