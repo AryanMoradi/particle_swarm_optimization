@@ -11,7 +11,6 @@ class Particle:
     def __init__(self,num_dimensions,position_range,velocity_range):
         self.velocity = []
         self.position = []
-        self.num_dimensions = num_dimensions
         self.velocity = random.uniform(-velocity_range,velocity_range,num_dimensions)
         self.position = random.uniform(-position_range,position_range,num_dimensions)
         self.best_position = self.position
@@ -19,15 +18,16 @@ class Particle:
 
 
 class PSO:
-    def __init__(self, problem, num_particles, max_iterations, topology):
+    def __init__(self, problem, num_particles, max_iterations, topology,num_dimensions):
         # initialise components
         self.problem = problem
         self.num_particles = num_particles
         self.max_iterations = max_iterations
         self.topology = topology
+        self.num_dimensions = num_dimensions
 
     def optimize(self):
-        #for each time step t
+        fitness_function = AckleyFunction(dimensions=self.num_dimensions)
         for _ in range(self.max_iterations):
             #initialize random topology
             if self.topology.type == "rand":
@@ -44,7 +44,7 @@ class PSO:
                     self.problem[particle].best_position = fitness
 
                 # update neighbour fitness if better
-                for neighbour in topology.neighbour_list[particle]:
+                for neighbour in self.topology.neighbour_list[particle]:
                     fitness = fitness_function.evaluate(neighbour.position)
                     if fitness > self.problem[particle].best_neighbour_position:
                         self.problem[particle].best_neighbour_position = fitness
@@ -58,7 +58,7 @@ class PSO:
         # Vid = Vid + Ce1(Pid-Xid) + Ce2(Pgd-Xid)
         e1 = random.uniform(0, 1, particle.num_dimensions)
         e2 = random.uniform(0, 1, particle.num_dimensions)
-        for d in particle.num_dimensions:
+        for d in self.num_dimensions:
             particle.velocity[d] = particle.velocity[d] + 2*e1[d]*(particle.best_position[d]-particle.position[d]) + 2*e2[d]*(
                 particle.best_neighbour_position[d]-particle.position[d])
             particle.position[d] = particle.position[d] + particle.velocity[d]
