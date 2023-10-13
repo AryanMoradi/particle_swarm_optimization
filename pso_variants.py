@@ -3,8 +3,9 @@ import random
 from optimization_problems import AckleyFunction
 from topologies import GlobalBestTopology, RingTopology, StarTopology, RandomNeighbourhoodConnectivity
 
-#assumes that particle class has the following variables: position, velocity, best individual position, best position of any neighbours
-#assumes fitness has been implemented elsewhere and can be imported
+# assumes that particle class has the following variables: position, velocity, best individual position, best position of any neighbours
+# assumes fitness has been implemented elsewhere and can be imported
+
 
 class Particle:
     def __init__(self,num_dimensions,position_range,velocity_range):
@@ -19,7 +20,7 @@ class Particle:
 
 class PSO:
     def __init__(self, problem, num_particles, max_iterations, topology):
-        #initialise components
+        # initialise components
         self.problem = problem
         self.num_particles = num_particles
         self.max_iterations = max_iterations
@@ -27,25 +28,22 @@ class PSO:
 
     def optimize(self):
         #for each time step t
-        #initialize ackley function
-        #optimization = OptimizationProblem(dimensions,-30,30)
-        fitness_function = AckleyFunction(dimensions=self.num_dimensions)
         for _ in range(self.max_iterations):
             #initialize random topology
             if self.topology.type == "rand":
                 self.topology.update(self.problem)
             for particle in range(self.num_particles):
-                #update position and velocity
+                # update position and velocity
                 self.update(particle)
 
                 #calculate particle fitness and update best individual fitness
                 fitness = fitness_function.evaluate(self.problem[particle].position)
 
-                #update individual fitness if better
+                # update individual fitness if better
                 if fitness > self.problem[particle].best_position:
                     self.problem[particle].best_position = fitness
 
-                #update neighbour fitness if better
+                # update neighbour fitness if better
                 for neighbour in topology.neighbour_list[particle]:
                     fitness = fitness_function.evaluate(neighbour.position)
                     if fitness > self.problem[particle].best_neighbour_position:
@@ -55,14 +53,14 @@ class PSO:
             if self.topology.type == "star":
                 self.topology.update(self.problem)
 
-
     def update(self, particle_index):
         particle = self.problem[particle_index]
-        #Vid = Vid + Ce1(Pid-Xid) + Ce2(Pgd-Xid)
-        e1 = random.uniform(0,1,particle.num_dimensions)
-        e2 = random.uniform(0,1,particle.num_dimensions)
+        # Vid = Vid + Ce1(Pid-Xid) + Ce2(Pgd-Xid)
+        e1 = random.uniform(0, 1, particle.num_dimensions)
+        e2 = random.uniform(0, 1, particle.num_dimensions)
         for d in particle.num_dimensions:
-            particle.velocity[d] = particle.velocity[d] + 2*e1[d]*(particle.best_position[d]-particle.position[d]) + 2*e2[d]*(particle.best_neighbour_position[d]-particle.position[d])
+            particle.velocity[d] = particle.velocity[d] + 2*e1[d]*(particle.best_position[d]-particle.position[d]) + 2*e2[d]*(
+                particle.best_neighbour_position[d]-particle.position[d])
             particle.position[d] = particle.position[d] + particle.velocity[d]
         self.problem[particle_index] = particle
         return
