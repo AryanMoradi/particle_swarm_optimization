@@ -20,6 +20,7 @@ class AckleyFunction(OptimizationProblem):
 
     def evaluate(self, position):
         d = len(position)
+        position = np.array(position)
         sum1 = -self.a * np.exp(-self.b * np.sqrt(np.sum(position**2) / d))
         sum2 = -np.exp(np.sum(np.cos(self.c * position)) / d)
         return sum1 + sum2 + self.a + np.exp(1)
