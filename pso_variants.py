@@ -40,9 +40,10 @@ class PSO:
         standard_deviation = []
         velocity_vector_length = []
         for i in range(self.max_iterations):
-            #initialize random topology
+            #arrays for graphing data
             all_positions = []
             all_vectors = []
+            #initialize random topology
             if self.topology.type == "rand":
                 self.topology.update(self.problem)
             for particle in range(self.num_particles):
@@ -75,11 +76,16 @@ class PSO:
             #append graph metrics
             x.append(i+1)
             global_fitness.append(global_best_fitness)
+
+            #append swarm distance
             mean = np.average(all_positions, axis=0)
             swarm_centre_of_mass.append(np.linalg.norm(global_best_position-mean))
 
+            #append standard deviation
             distances = np.linalg.norm(all_positions - mean, axis=1)
             standard_deviation.append(stdev(distances))
+
+            #append mean velocity length
             mean_velocity = np.average(all_vectors, axis=0)
             sum = float(0)
             for velocity in mean_velocity:
