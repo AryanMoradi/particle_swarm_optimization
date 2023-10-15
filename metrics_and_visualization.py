@@ -20,6 +20,7 @@ def gather_metrics(swarm):
 
 
 def plot_metrics(metrics_data_list):
+    plt.figure()
     colors = distinctipy.get_colors(len(metrics_data_list))
 
     fig, ax = plt.subplots(2, 2, figsize=(12, 8))
@@ -67,4 +68,3 @@ def plot_metrics(metrics_data_list):
     ax[1, 1].legend()
 
     plt.tight_layout()
-    plt.show()
