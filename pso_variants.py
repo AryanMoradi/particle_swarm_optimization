@@ -19,6 +19,7 @@ class Particle:
         self.best_neighbour_fitness = self.best_fitness
 
 
+#standard pso
 class PSO:
     def __init__(self, problem, num_particles, max_iterations, topology, num_dimensions):
         self.problem = problem
@@ -73,6 +74,9 @@ class PSO:
                     self.global_best_fitness = fitness
                     self.global_best_position = self.problem[particle].position
 
+            if self.topology.type == "star":
+                self.topology.update(self.problem)
+
             x.append(i + 1)
             global_fitness.append(self.global_best_fitness)
 
@@ -92,6 +96,21 @@ class PSO:
 
         return x, global_fitness, swarm_centre_of_mass, standard_deviation, velocity_vector_length
 
+    def update(self, particle_index):
+        particle = self.problem[particle_index]
+        # Vid = Vid + Ce1(Pid-Xid) + Ce2(Pgd-Xid)
+        e1 = [random.uniform(0, 1) for i in range(self.num_dimensions)]
+        e2 = [random.uniform(0, 1) for i in range(self.num_dimensions)]
+        for d in range(self.num_dimensions):
+            particle.velocity[d] = particle.velocity[d] + 2*e1[d]*(particle.best_position[d]-particle.position[d]) + 2*e2[d]*(
+                particle.best_neighbour_position[d]-particle.position[d])
+            particle.position[d] = particle.position[d] + particle.velocity[d]
+        self.problem[particle_index] = particle
+        return
+
+#inertia weight pso
+class inertia_weight_PSO(PSO):
+    #overrride update function
     def update(self, particle_index):
         particle = self.problem[particle_index]
         e1 = [random.uniform(0, 1) for _ in range(self.num_dimensions)]
