@@ -1,152 +1,42 @@
 import random
 import matplotlib.pyplot as plt
-from optimization_problems import AckleyFunction
-from pso_variants import Particle, PSO
-from topologies import GlobalBestTopology, RingTopology, StarTopology, RandomNeighbourhoodConnectivity
+import metrics_and_visualization as mv
+from pso_variants import Particle, PSO, GlobalBestTopology
+import os
 
-def initialise_swarm(num_particles, num_dimensioms,position_range,velocity_range):
-    particles = []
-    for _ in range(num_particles):
-        new_particle = Particle(num_dimensioms,position_range,velocity_range)
-        particles.append(new_particle)
-
-    return particles
-
-#run on ackley function 10 times
-for _ in range(10):
-    problem = initialise_swarm(50,10,30,30)
-    topology = GlobalBestTopology(problem)
-    pso = PSO(problem,50,1000,topology,10)
-    x,global_fitness,swarm_centre_of_mass,standard_deviation,velocity_vector_length = pso.optimize()
-    plt.scatter(x,global_fitness)
-    plt.title("global_fitness")
-    plt.show()
-    plt.scatter(x,swarm_centre_of_mass)
-    plt.title("swarm centre of mass distance")
-    plt.show()
-    plt.scatter(x,standard_deviation)
-    plt.title("standard deviation")
-    plt.show()
-    plt.scatter(x,velocity_vector_length)
-    plt.title("velocity")
-    plt.show()
-    
+# Requirement 6
 
 
-#repeat on swarm size 20,100,200
-swarm_sizes = [20,100,200]
+def run_experiment(swarm_size, num_runs=10):
+    num_particles = swarm_size
+    num_dimensions = 10
+    position_range = 30
+    velocity_range = 30
 
-for size in swarm_sizes:
-    problem = initialise_swarm(size,10,30,30)
-    topology = GlobalBestTopology(problem)
-    pso = PSO(problem,size,1000,topology,10)
-    x,global_fitness,swarm_centre_of_mass,standard_deviation,velocity_vector_length = pso.optimize()
-    plt.scatter(x,global_fitness)
-    plt.title("global_fitness")
-    plt.show()
-    plt.scatter(x,swarm_centre_of_mass)
-    plt.title("swarm centre of mass distance")
-    plt.show()
-    plt.scatter(x,standard_deviation)
-    plt.title("standard deviation")
-    plt.show()
-    plt.scatter(x,velocity_vector_length)
-    plt.title("velocity")
-    plt.show()
-    
-    
+    all_metrics_data = []
 
-#inertia weight adjustment
+    for run in range(num_runs):
+        problem = [Particle(num_dimensions, position_range, velocity_range)
+                   for _ in range(num_particles)]
+        topology = GlobalBestTopology(problem)
 
+        pso = PSO(problem, num_particles, 1000, topology, num_dimensions)
 
-#neighbourhood topology comparison
-#gbest
+        x, global_fitness, swarm_centre_of_mass, standard_deviation, velocity_vector_length = pso.optimize()
 
-for _ in range(10):
-    problem = initialise_swarm(50,10,30,30)
-    topology = GlobalBestTopology(problem)
-    pso = PSO(problem,50,1000,topology,10)
-    x,global_fitness,swarm_centre_of_mass,standard_deviation,velocity_vector_length = pso.optimize()
-    plt.scatter(x,global_fitness)
-    plt.title("global_fitness")
-    plt.show()
-    plt.scatter(x,swarm_centre_of_mass)
-    plt.title("swarm centre of mass distance")
-    plt.show()
-    plt.scatter(x,standard_deviation)
-    plt.title("standard deviation")
-    plt.show()
-    plt.scatter(x,velocity_vector_length)
-    plt.title("velocity")
-    plt.show()
-    
+        metrics_data = {
+            "iterations": x,
+            "best_fitness": global_fitness,
+            "distance_to_optimum": swarm_centre_of_mass,
+            "std_dev_positions": standard_deviation,
+            "mean_velocity": velocity_vector_length
+        }
+
+        all_metrics_data.append(metrics_data)
+
+    mv.plot_metrics(all_metrics_data)
+
+    plt.savefig("results/metrics_std_pso.png")
 
 
-#ring topology
-for _ in range(10):
-    problem = initialise_swarm(50,10,30,30)
-    topology = RingTopology(problem)
-    pso = PSO(problem,50,1000,topology,10)
-    x,global_fitness,swarm_centre_of_mass,standard_deviation,velocity_vector_length = pso.optimize()
-    plt.scatter(x,global_fitness)
-    plt.title("global_fitness")
-    plt.show()
-    plt.scatter(x,swarm_centre_of_mass)
-    plt.title("swarm centre of mass distance")
-    plt.show()
-    plt.scatter(x,standard_deviation)
-    plt.title("standard deviation")
-    plt.show()
-    plt.scatter(x,velocity_vector_length)
-    plt.title("velocity")
-    plt.show()
-    
-
-#neighbourhood_results.append(results)
-
-#star
-for _ in range(10):
-    problem = initialise_swarm(50,10,30,30)
-    topology = StarTopology(problem)
-    pso = PSO(problem,50,1000,topology,10)
-    x,global_fitness,swarm_centre_of_mass,standard_deviation,velocity_vector_length = pso.optimize()
-    plt.scatter(x,global_fitness)
-    plt.title("global_fitness")
-    plt.show()
-    plt.scatter(x,swarm_centre_of_mass)
-    plt.title("swarm centre of mass distance")
-    plt.show()
-    plt.scatter(x,standard_deviation)
-    plt.title("standard deviation")
-    plt.show()
-    plt.scatter(x,velocity_vector_length)
-    plt.title("velocity")
-    plt.show()
-    
-
-#random
-results = []
-for _ in range(10):
-    problem = initialise_swarm(50,10,30,30)
-    topology = RandomNeighbourhoodConnectivity(problem)
-    pso = PSO(problem,50,1000,topology,10)
-    x,global_fitness,swarm_centre_of_mass,standard_deviation,velocity_vector_length = pso.optimize()
-    plt.scatter(x,global_fitness)
-    plt.title("global_fitness")
-    plt.show()
-    plt.scatter(x,swarm_centre_of_mass)
-    plt.title("swarm centre of mass distance")
-    plt.show()
-    plt.scatter(x,standard_deviation)
-    plt.title("standard deviation")
-    plt.show()
-    plt.scatter(x,velocity_vector_length)
-    plt.title("velocity")
-    plt.show()
-    
-
-
-
-
-
-
+run_experiment(30)
