@@ -1,13 +1,15 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import distinctipy
 
 
 def gather_metrics(swarm):
-    # Use the swarm object's properties to calculate metrics
     best_fitness = swarm.global_best_fitness
-    distance_to_optimum = np.linalg.norm(swarm.global_best_position)
-    std_dev_positions = np.std(swarm.positions, axis=0)
-    mean_velocity = np.mean(np.linalg.norm(swarm.velocities, axis=1))
+    center_of_mass = np.mean([particle.position for particle in swarm], axis=0)
+    distance_to_optimum = np.linalg.norm(center_of_mass)
+    std_dev_positions = np.std([particle.position for particle in swarm])
+    mean_velocity = np.mean([np.linalg.norm(particle.velocity)
+                            for particle in swarm])
 
     return {
         "best_fitness": best_fitness,
@@ -17,40 +19,51 @@ def gather_metrics(swarm):
     }
 
 
-def plot_metrics(metrics_data):
+def plot_metrics(metrics_data_list):
+    colors = distinctipy.get_colors(len(metrics_data_list))
+
     fig, ax = plt.subplots(2, 2, figsize=(12, 8))
 
-    # Plot best fitness value vs iterations
-    ax[0, 0].plot(metrics_data["iterations"],
-                  metrics_data["best_fitness"], label="Best Fitness")
+    for i, metrics_data in enumerate(metrics_data_list):
+        color = colors[i]
+        label = f"Run {i + 1}"
+
+        # Plot best fitness value vs iterations
+        ax[0, 0].plot(metrics_data["iterations"],
+                      metrics_data["best_fitness"], label=label, color=color)
+
+        # Plot distance to global optimum vs iterations
+        ax[0, 1].plot(metrics_data["iterations"],
+                      metrics_data["distance_to_optimum"], label=label, color=color)
+
+        # Plot standard deviation of particle positions vs iterations
+        ax[1, 0].plot(metrics_data["iterations"],
+                      metrics_data["std_dev_positions"], label=label, color=color)
+
+        # Plot mean velocity vs iterations
+        ax[1, 1].plot(metrics_data["iterations"],
+                      metrics_data["mean_velocity"], label=label, color=color)
+
     ax[0, 0].set_title("Best Fitness vs Iterations")
     ax[0, 0].set_xlabel("Iterations")
     ax[0, 0].set_ylabel("Best Fitness")
-    ax[0, 0].legend()
 
-    # Plot distance to global optimum vs iterations
-    ax[0, 1].plot(metrics_data["iterations"],
-                  metrics_data["distance_to_optimum"], label="Distance to Optimum")
     ax[0, 1].set_title("Distance to Global Optimum vs Iterations")
     ax[0, 1].set_xlabel("Iterations")
     ax[0, 1].set_ylabel("Distance to Optimum")
-    ax[0, 1].legend()
 
-    # Plot standard deviation of particle positions vs iterations
-    ax[1, 0].plot(metrics_data["iterations"],
-                  metrics_data["std_dev_positions"], label="Std Dev of Positions")
     ax[1, 0].set_title(
         "Standard Deviation of Particle Positions vs Iterations")
     ax[1, 0].set_xlabel("Iterations")
     ax[1, 0].set_ylabel("Std Dev of Positions")
-    ax[1, 0].legend()
 
-    # Plot mean velocity vs iterations
-    ax[1, 1].plot(metrics_data["iterations"],
-                  metrics_data["mean_velocity"], label="Mean Velocity")
     ax[1, 1].set_title("Mean Velocity vs Iterations")
     ax[1, 1].set_xlabel("Iterations")
     ax[1, 1].set_ylabel("Mean Velocity")
+
+    ax[0, 0].legend()
+    ax[0, 1].legend()
+    ax[1, 0].legend()
     ax[1, 1].legend()
 
     plt.tight_layout()
