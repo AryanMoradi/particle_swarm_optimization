@@ -102,7 +102,7 @@ class PSO:
             sum_velocity = np.sum(np.abs(mean_velocity))
             velocity_vector_length.append(sum_velocity / self.num_dimensions)
 
-            if self.global_best_fitness < 1e-6:
+            if len(global_fitness) > 20 and self.global_best_fitness == global_fitness[i-19]:
                 break
 
         return x, global_fitness, swarm_centre_of_mass, standard_deviation, velocity_vector_length
