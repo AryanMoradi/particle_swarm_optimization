@@ -46,6 +46,7 @@ def run_experiment(swarm_size, num_runs=10, pso_type="standard",topology_type="g
     mv.plot_metrics(all_metrics_data)
 
     plt.savefig("results/" + file_name)
+    plt.close()
 
 
 #run_experiment(5,num_runs=1,file_name="metrics_std_pso.png")
@@ -70,16 +71,38 @@ run_experiment(30,topology_type="star", file_name="metrics_std_pso_topo_star.png
 run_experiment(30,topology_type="rand", file_name="metrics_std_pso_topo_rand.png")
 
 #part10
+#try 20 gbest inertia
+run_experiment(20,topology_type="gbest",pso_type="inertia", file_name="metrics_weight_adjust_pso_topo_gbest_swarm20.png")
+#try 100 gbest inertia
+run_experiment(100,topology_type="gbest",pso_type="inertia", file_name="metrics_weight_adjust_pso_topo_gbest_swarm100.png")
+#try 200 gbest inertia
+run_experiment(200,topology_type="gbest",pso_type="inertia", file_name="metrics_weight_adjust_pso_topo_gbest_swarm200.png")
+#try 200 gbest standard
+run_experiment(200,topology_type="gbest", file_name="metrics_std_pso_topo_gbest_swarm200.png")
+
+#try 20 ring inertia
+run_experiment(20,topology_type="ring",pso_type="inertia", file_name="metrics_weight_adjust_pso_topo_ring_swarm20.png")
 #try 100 ring inertia
 run_experiment(100,topology_type="ring",pso_type="inertia", file_name="metrics_weight_adjust_pso_topo_ring_swarm100.png")
+#try 200 ring inertia
+run_experiment(200,topology_type="ring",pso_type="inertia", file_name="metrics_weight_adjust_pso_topo_ring_swarm200.png")
+#try 200 ring standard
+run_experiment(200,topology_type="ring", file_name="metrics_std_pso_topo_ring_swarm200.png")
 
-#try 200 star standard
-run_experiment(200,topology_type="star", file_name="metrics_std_pso_topo_star_swarm200.png")
 #try 20 star inertia
 run_experiment(20,topology_type="star",pso_type="inertia", file_name="metrics_weight_adjust_pso_topo_star_swarm20.png")
+#try 100 star inertia
+run_experiment(100,topology_type="star",pso_type="inertia", file_name="metrics_weight_adjust_pso_topo_star_swarm20.png")
+#try 200 star inertia
+run_experiment(200,topology_type="star",pso_type="inertia", file_name="metrics_weight_adjust_pso_topo_star_swarm200.png")
+#try 200 star standard
+run_experiment(200,topology_type="star", file_name="metrics_std_pso_topo_star_swarm200.png")
+
+#try 20 rand inertia
+run_experiment(20,topology_type="rand",pso_type="inertia", file_name="metrics_weight_adjiust_pso_topo_rand_swarm20.png")
+#try 100 rand inertia
+run_experiment(100,topology_type="rand",pso_type="inertia", file_name="metrics_weight_adjiust_pso_topo_rand_swarm100.png")
 #try 200 rand inertia
-run_experiment(200,topology_type="rand",pso_type="inertia", file_name="metrics_weight_adjust_pso_topo_rand_swarm200.png")
-#try 20 rand standard
-run_experiment(20,topology_type="rand", file_name="metrics_std_pso_topo_rand_swarm20.png")
-#try 20 ring standard
-run_experiment(20,topology_type="ring", file_name="metrics_std_pso_topo_ring_swarm20.png")
+run_experiment(200,topology_type="rand",pso_type="inertia", file_name="metrics_weight_adjiust_pso_topo_rand_swarm200.png")
+#try 200 rand standard
+run_experiment(200,topology_type="rand", file_name="metrics_std_pso_topo_rand_swarm200.png")
