@@ -52,7 +52,9 @@ def run_experiment(swarm_size, num_runs=10, pso_type="standard",topology_type="g
 
 #part6 
 run_experiment(30,file_name="metrics_std_pso.png")
+run_experiment(30,pso_type="inertia",file_name="metrics_std_pso_weight adjust.png")
 
+"""
 #part7
 run_experiment(20,file_name="metrics_std_pso_swarm20.png")
 run_experiment(100,file_name="metrics_std_pso_swarm100.png")
@@ -66,3 +68,4 @@ run_experiment(30, file_name="metrics_std_pso_topo_gbest.png")
 run_experiment(30,topology_type="ring", file_name="metrics_std_pso_topo_ring.png")
 run_experiment(30,topology_type="star", file_name="metrics_std_pso_topo_star.png")
 run_experiment(30,topology_type="rand", file_name="metrics_std_pso_topo_rand.png")
+"""

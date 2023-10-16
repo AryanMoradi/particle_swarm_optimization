@@ -61,8 +61,6 @@ class PSO:
                 all_positions.append(self.problem[particle].position)
                 all_vectors.append(self.problem[particle].velocity)
 
-                self.update(particle)
-
                 fitness = fitness_function.evaluate(
                     self.problem[particle].position)
 
@@ -73,6 +71,18 @@ class PSO:
                 if fitness < self.global_best_fitness:
                     self.global_best_fitness = fitness
                     self.global_best_position = self.problem[particle].position
+
+                if self.topology.type == "gbest":
+                    self.problem[particle].best_neighbour_position = self.global_best_position
+                    self.problem[particle].best_neighbour_fitness = self.global_best_fitness
+                else:
+                    for neighbour in self.topology.neighbour_list[particle]:
+                        fitness = fitness_function.evaluate(self.problem[neighbour].position)
+                        if fitness < self.problem[particle].best_neighbour_fitness:
+                            self.problem[particle].best_neighbour_position = self.problem[neighbour].position
+                            self.problem[particle].best_neighbour_fitness = fitness
+
+                self.update(particle)
 
             if self.topology.type == "star":
                 self.topology.update(self.problem)
