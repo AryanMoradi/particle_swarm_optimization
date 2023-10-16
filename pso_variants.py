@@ -93,9 +93,9 @@ class PSO:
             mean = np.average(all_positions, axis=0)
             swarm_centre_of_mass.append(
                 np.linalg.norm(self.global_best_position - mean))
-
+   
             distances = np.linalg.norm(all_positions - mean, axis=1)
-            standard_deviation.append(stdev(distances))
+            standard_deviation.append(np.std(distances))
 
             mean_velocity = np.average(all_vectors, axis=0)
             sum_velocity = np.sum(np.abs(mean_velocity))

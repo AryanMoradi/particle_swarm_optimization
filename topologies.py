@@ -14,11 +14,11 @@ class RingTopology:
         self.type = "ring"
         self.neighbour_list = []
 
-        self.neighbour_list.append(len(particles)-1,1)
+        self.neighbour_list.append([len(particles)-1,1])
         for i in range(1,len(particles)-1):
-            self.neighbour_list.append(i-1,i+1)
+            self.neighbour_list.append([i-1,i+1])
 
-        self.neighbour_list.append(len(particles)-2,0)
+        self.neighbour_list.append([len(particles)-2,0])
 
 class StarTopology:
     def __init__(self,particles):
@@ -28,8 +28,8 @@ class StarTopology:
     def update(self,particles):
         fitness_function = AckleyFunction(dimensions=len(particles[0].position))
         best_fitness = fitness_function.evaluate(particles[0].position)
-        current_best = particles[0]
-        for i in range(len(particles)):
+        current_best_index = 0
+        for i in range(1,len(particles)):
             fitness = fitness_function.evaluate(particles[i].position)
             if fitness < best_fitness:
                 best_fitness = fitness
