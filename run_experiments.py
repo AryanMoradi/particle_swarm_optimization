@@ -50,14 +50,14 @@ def run_experiment(swarm_size, num_runs=10, pso_type="standard", topology_type="
     plt.close()
 
 
-run_experiment(5,num_runs=1,file_name="metrics_std_pso.png")
+#run_experiment(100,num_runs=1,file_name="metrics_std_pso.png",topology_type="gbest")
 
 # part6
-#run_experiment(30, file_name="metrics_std_pso.png")
+run_experiment(30, file_name="metrics_std_pso.png")
 # run_experiment(30, pso_type="inertia",
 #                file_name="metrics_std_pso_weight_adjust.png")
 
-"""
+
 # # part7
 run_experiment(20, file_name="metrics_std_pso_swarm20.png")
 run_experiment(100, file_name="metrics_std_pso_swarm100.png")
@@ -128,4 +128,3 @@ run_experiment(200, topology_type="rand", pso_type="inertia",
 # # try 200 rand standard
 run_experiment(200, topology_type="rand",
                 file_name="metrics_std_pso_topo_rand_swarm200.png")
-"""
