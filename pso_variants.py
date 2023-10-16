@@ -19,7 +19,7 @@ class Particle:
         self.best_neighbour_fitness = self.best_fitness
 
 
-#standard pso
+# standard pso
 class PSO:
     def __init__(self, problem, num_particles, max_iterations, topology, num_dimensions):
         self.problem = problem
@@ -77,7 +77,8 @@ class PSO:
                     self.problem[particle].best_neighbour_fitness = self.global_best_fitness
                 else:
                     for neighbour in self.topology.neighbour_list[particle]:
-                        fitness = fitness_function.evaluate(self.problem[neighbour].position)
+                        fitness = fitness_function.evaluate(
+                            self.problem[neighbour].position)
                         if fitness < self.problem[particle].best_neighbour_fitness:
                             self.problem[particle].best_neighbour_position = self.problem[neighbour].position
                             self.problem[particle].best_neighbour_fitness = fitness
@@ -93,9 +94,9 @@ class PSO:
             mean = np.average(all_positions, axis=0)
             swarm_centre_of_mass.append(
                 np.linalg.norm(self.global_best_position - mean))
-   
+
             distances = np.linalg.norm(all_positions - mean, axis=1)
-            standard_deviation.append(np.std(distances))
+            standard_deviation.append(stdev(distances))
 
             mean_velocity = np.average(all_vectors, axis=0)
             sum_velocity = np.sum(np.abs(mean_velocity))
@@ -114,13 +115,26 @@ class PSO:
         for d in range(self.num_dimensions):
             particle.velocity[d] = particle.velocity[d] + 2*e1[d]*(particle.best_position[d]-particle.position[d]) + 2*e2[d]*(
                 particle.best_neighbour_position[d]-particle.position[d])
-            particle.position[d] = particle.position[d] + particle.velocity[d]
-        self.problem[particle_index] = particle
-        return
 
-#inertia weight pso
+            # Update position
+            particle.position[d] = particle.position[d] + particle.velocity[d]
+
+            # Check boundary conditions and adjust if necessary
+            fitness_function = AckleyFunction(dimensions=self.num_dimensions)
+            lower_bound = fitness_function.lower_bound
+            upper_bound = fitness_function.upper_bound
+
+            if particle.position[d] < lower_bound:
+                particle.position[d] = lower_bound
+            elif particle.position[d] > upper_bound:
+                particle.position[d] = upper_bound
+
+        self.problem[particle_index] = particle
+
+
+# inertia weight pso
 class inertia_weight_PSO(PSO):
-    #overrride update function
+    # overrride update function
     def update(self, particle_index):
         particle = self.problem[particle_index]
         e1 = [random.uniform(0, 1) for _ in range(self.num_dimensions)]
