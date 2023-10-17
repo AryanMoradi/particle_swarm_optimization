@@ -42,70 +42,70 @@ def run_experiment(swarm_size, pso_type="standard", topology_type="gbest", file_
 
 
 # part6
-# run_experiment(30, file_name="metrics_std_pso.png")
+run_experiment(30, file_name="metrics_std_pso.png")
 # run_experiment(30, pso_type="inertia",
 #                file_name="metrics_std_pso_weight_adjust.png")
 
 
-# # # part7
-# run_experiment(20, file_name="metrics_std_pso_swarm20.png")
-# run_experiment(100, file_name="metrics_std_pso_swarm100.png")
-# run_experiment(200, file_name="metrics_std_pso_swarm200.png")
+# # part7
+run_experiment(20, file_name="metrics_std_pso_swarm20.png")
+run_experiment(100, file_name="metrics_std_pso_swarm100.png")
+run_experiment(200, file_name="metrics_std_pso_swarm200.png")
 
-# # # # part8
-# run_experiment(30, pso_type="inertia",
-#                file_name="metrics_std_pso_weight_adjust.png")
+# # # part8
+run_experiment(30, pso_type="inertia",
+               file_name="metrics_std_pso_weight_adjust.png")
 
-# # # part9
-# run_experiment(30, file_name="metrics_std_pso_topo_gbest.png")
-# run_experiment(30, topology_type="ring",
-#                file_name="metrics_std_pso_topo_ring.png")
-# run_experiment(30, topology_type="star",
-#                file_name="metrics_std_pso_topo_star.png")
-# run_experiment(30, topology_type="rand",
-#                file_name="metrics_std_pso_topo_rand.png")
+# # part9
+run_experiment(30, file_name="metrics_std_pso_topo_gbest.png")
+run_experiment(30, topology_type="ring",
+               file_name="metrics_std_pso_topo_ring.png")
+run_experiment(30, topology_type="star",
+               file_name="metrics_std_pso_topo_star.png")
+run_experiment(30, topology_type="rand",
+               file_name="metrics_std_pso_topo_rand.png")
 
-# # # part10
-# # # try 20 gbest inertia
-# run_experiment(20, topology_type="gbest", pso_type="inertia",
-#                file_name="metrics_weight_adjust_pso_topo_gbest_swarm20.png")
-# # # try 100 gbest inertia
-# run_experiment(100, topology_type="gbest", pso_type="inertia",
-#                file_name="metrics_weight_adjust_pso_topo_gbest_swarm100.png")
-# # # try 200 gbest inertia
-# run_experiment(200, topology_type="gbest", pso_type="inertia",
-#                file_name="metrics_weight_adjust_pso_topo_gbest_swarm200.png")
-# # # try 200 gbest standard
-# run_experiment(200, topology_type="gbest",
-#                file_name="metrics_std_pso_topo_gbest_swarm200.png")
+# # part10
+# # try 20 gbest inertia
+run_experiment(20, topology_type="gbest", pso_type="inertia",
+               file_name="metrics_weight_adjust_pso_topo_gbest_swarm20.png")
+# # try 100 gbest inertia
+run_experiment(100, topology_type="gbest", pso_type="inertia",
+               file_name="metrics_weight_adjust_pso_topo_gbest_swarm100.png")
+# # try 200 gbest inertia
+run_experiment(200, topology_type="gbest", pso_type="inertia",
+               file_name="metrics_weight_adjust_pso_topo_gbest_swarm200.png")
+# # try 200 gbest standard
+run_experiment(200, topology_type="gbest",
+               file_name="metrics_std_pso_topo_gbest_swarm200.png")
 
-# # # try 20 ring inertia
-# run_experiment(20, topology_type="ring", pso_type="inertia",
-#                file_name="metrics_weight_adjust_pso_topo_ring_swarm20.png")
-# # # try 100 ring inertia
-# run_experiment(100, topology_type="ring", pso_type="inertia",
-#                file_name="metrics_weight_adjust_pso_topo_ring_swarm100.png")
-# # # try 200 ring inertia
-# run_experiment(200, topology_type="ring", pso_type="inertia",
-#                file_name="metrics_weight_adjust_pso_topo_ring_swarm200.png")
-# # # try 200 ring standard
-# run_experiment(200, topology_type="ring",
-#                file_name="metrics_std_pso_topo_ring_swarm200.png")
+# # try 20 ring inertia
+run_experiment(20, topology_type="ring", pso_type="inertia",
+               file_name="metrics_weight_adjust_pso_topo_ring_swarm20.png")
+# # try 100 ring inertia
+run_experiment(100, topology_type="ring", pso_type="inertia",
+               file_name="metrics_weight_adjust_pso_topo_ring_swarm100.png")
+# # try 200 ring inertia
+run_experiment(200, topology_type="ring", pso_type="inertia",
+               file_name="metrics_weight_adjust_pso_topo_ring_swarm200.png")
+# # try 200 ring standard
+run_experiment(200, topology_type="ring",
+               file_name="metrics_std_pso_topo_ring_swarm200.png")
 
-# # # try 20 star inertia
-# run_experiment(20, topology_type="star", pso_type="inertia",
-#                file_name="metrics_weight_adjust_pso_topo_star_swarm20.png")
-# # # try 100 star inertia
-# run_experiment(100, topology_type="star", pso_type="inertia",
-#                file_name="metrics_weight_adjust_pso_topo_star_swarm20.png")
-# # # try 200 star inertia
-# run_experiment(200, topology_type="star", pso_type="inertia",
-#                file_name="metrics_weight_adjust_pso_topo_star_swarm200.png")
-# # # try 200 star standard
-# run_experiment(200, topology_type="star",
-#                file_name="metrics_std_pso_topo_star_swarm200.png")
+# # try 20 star inertia
+run_experiment(20, topology_type="star", pso_type="inertia",
+               file_name="metrics_weight_adjust_pso_topo_star_swarm20.png")
+# # try 100 star inertia
+run_experiment(100, topology_type="star", pso_type="inertia",
+               file_name="metrics_weight_adjust_pso_topo_star_swarm20.png")
+# # try 200 star inertia
+run_experiment(200, topology_type="star", pso_type="inertia",
+               file_name="metrics_weight_adjust_pso_topo_star_swarm200.png")
+# # try 200 star standard
+run_experiment(200, topology_type="star",
+               file_name="metrics_std_pso_topo_star_swarm200.png")
 
-# # try 20 rand inertia
+# try 20 rand inertia
 run_experiment(20, topology_type="rand", pso_type="inertia",
                file_name="metrics_weight_adjiust_pso_topo_rand_swarm20.png")
 # # try 100 rand inertia
