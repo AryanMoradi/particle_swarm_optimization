@@ -1,5 +1,4 @@
 
-Apologies for the oversight. Here's a concise 300-word version:
 
 Particle Swarm Optimization Library Architecture Design
 Our Particle Swarm Optimization (PSO) library architecture is meticulously designed to meet core objectives. This Python-based library aims to solve real-valued optimization problems of varying dimensions, emphasizing modularity, usability, flexibility, and visualization.
