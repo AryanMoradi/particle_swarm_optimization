@@ -53,7 +53,7 @@ class PSO:
         self.global_best_position = np.random.uniform(
             problem.lower_bound, problem.upper_bound, problem.get_dimensions())
         self.global_best_fitness = float('inf')
-        print(problem.get_dimensions())
+        # print(problem.get_dimensions())
         self.swarm = [Particle(problem.get_dimensions(
         ), problem.lower_bound, problem.upper_bound) for _ in range(num_particles)]
         self.num_neighbors = num_neighbors
@@ -67,8 +67,8 @@ class PSO:
         self.pso_type = pso_type
 
     def optimize(self):
-        print('using standard pso')
-        print('using', self.topology)
+        # print('using standard pso')
+        # print('using', self.topology)
         for i in range(self.max_iterations):
             best_fitness_this_iteration = float('inf')
 
@@ -133,8 +133,8 @@ class PSOWithWeight(PSO):
         return ((max_iterations - iteration) / max_iterations)**self.n * (self.intertia_min - self.intertia_max) + self.intertia_max
 
     def optimize(self):
-        print('using pso weighted')
-        print('using', self.topology)
+        # print('using pso weighted')
+        # print('using', self.topology)
         for i in range(self.max_iterations):
             best_fitness_this_iteration = float('inf')
 
