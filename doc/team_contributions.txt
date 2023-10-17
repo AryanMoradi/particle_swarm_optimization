@@ -1,0 +1,2 @@
+Kallan:
+Kallan designed and implemented the particle class and pso base class in pso_variants.py. Kallan also designed and implemented the topology classes in topologies.py. Kallan also helped to configure run_experiments.py.
