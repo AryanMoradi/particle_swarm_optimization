@@ -134,6 +134,7 @@ class PSOWithWeight(PSO):
 
     def optimize(self):
         print('using pso weighted')
+        print('using', self.topology)
         for i in range(self.max_iterations):
             best_fitness_this_iteration = float('inf')
 
@@ -175,7 +176,7 @@ class PSOWithWeight(PSO):
                 elif self.topology == 'star':
                     best_position = StarTopology.get_best_position(
                         self, index)
-                elif self.topology == 'random':
+                elif self.topology == 'rand':
                     best_position = RandomNeighbourhoodConnectivity.get_best_position(
                         self, index)
                 else:
