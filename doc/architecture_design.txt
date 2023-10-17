@@ -1,20 +1,13 @@
+The provided codebase offers a modular approach to Particle Swarm Optimization (PSO), a heuristic optimization technique. The architecture is divided into distinct modules, each with a specific responsibility:
 
+Optimization Problems: This module defines optimization challenges. The AckleyFunction class is an example, representing a multi-modal function. This modularity allows for easy addition of other optimization problems.
 
-Particle Swarm Optimization Library Architecture Design
-Our Particle Swarm Optimization (PSO) library architecture is meticulously designed to meet core objectives. This Python-based library aims to solve real-valued optimization problems of varying dimensions, emphasizing modularity, usability, flexibility, and visualization.
+PSO Variants: Central to the architecture is the PSO implementation. The base PSO class encapsulates core PSO logic, while PSOWithWeight offers a variant with inertia weight adjustments. The Particle class, integral to PSO, represents individual solution candidates.
 
-Modularity is central to our design. Key components, including Particle, Swarm, Fitness Function, Optimizer, Initializer, Metrics Calculator, and Visualizer, are encapsulated within separate modules or classes. This modular approach enables customization and experimentation with diverse PSO variants.
+Topologies: PSO's efficacy often depends on particle interaction topologies. The separate topologies allow particles to share information in various patterns, offering flexibility in swarm behavior.
 
-Usability is a priority. Clear and concise documentation will empower users to swiftly grasp the library's functionality. Detailed usage examples will facilitate its application to specific optimization problems.
+Metrics and Visualization: To assess and visualize PSO's performance, this module provides plotting functions. It tracks metrics like best fitness and particle velocities, aiding in understanding and fine-tuning the algorithm.
 
-Flexibility is crucial. The library is designed to handle a wide range of real-valued optimization problems with minimal customization. Users can configure PSO variants and optimization settings with ease, adapting the library to their unique requirements.
+Run Experiments: This module operationalizes the above components. By setting parameters like swarm size and topology, users can run diverse PSO experiments and visualize results.
 
-Visualization is essential. Our design incorporates a visual component to generate metrics diagrams, crucial for understanding and analyzing optimization runs.
-
-The Unified Modeling Language (UML) diagram illustrates the architecture, while documentation includes clear, informative comments for each module or class, supported by usage examples.
-
-Team contributions are documented, showcasing the collaborative effort invested in this project.
-
-Our design is rooted in the need for adaptability, user-friendliness, and extensibility. The library offers a user-centric, versatile, and well-documented solution for researchers and practitioners. It is poised to provide flexibility for diverse optimization problems, aligning with the assignment's objectives and serving as a foundation for future enhancements.
-
-In conclusion, our architecture design prioritizes modularity, usability, flexibility, and visualization in a concise, user-focused PSO library, making it a valuable tool for solving real-valued optimization problems.
+The architecture's rationale lies in its modularity and separation of concerns. Each module focuses on a singular aspect of PSO, ensuring clarity and ease of modification. This design facilitates scalability, allowing the seamless integration of additional problems, topologies, or PSO variants.
