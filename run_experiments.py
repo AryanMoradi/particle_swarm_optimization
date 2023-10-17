@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import metrics_and_visualization as mv
 from optimization_problems import AckleyFunction
-from pso_variants import PSO
+from pso_variants import PSO, PSOWithWeight
 import os
 
 
@@ -17,11 +17,11 @@ def run_experiment(swarm_size, pso_type="standard", topology_type="gbest", file_
 
     for run in range(10):
         if pso_type == "standard":
-            pso = PSO(AckleyFunction(dimensions=10),
-                      topology=topology_type, num_particles=swarm_size, max_iterations=1000)
+            pso = PSO(AckleyFunction(dimensions=10), num_particles=swarm_size,
+                      topology=topology_type, max_iterations=1000, pso_type=pso_type)
         else:
-            pso = PSO(AckleyFunction(dimensions=10),
-                      topology=topology_type, num_particles=swarm_size,  max_iterations=1000)
+            pso = PSOWithWeight(AckleyFunction(dimensions=10), num_particles=swarm_size,
+                                topology=topology_type, max_iterations=1000, pso_type=pso_type)
 
         i = pso.optimize()
 
@@ -52,9 +52,9 @@ run_experiment(30, file_name="metrics_std_pso.png")
 # run_experiment(100, file_name="metrics_std_pso_swarm100.png")
 # run_experiment(200, file_name="metrics_std_pso_swarm200.png")
 
-# # # part8
-# run_experiment(30, pso_type="inertia",
-#                file_name="metrics_std_pso_weight_adjust.png")
+# # # # part8
+run_experiment(30, pso_type="inertia",
+               file_name="metrics_std_pso_weight_adjust.png")
 
 # # # part9
 # run_experiment(30, file_name="metrics_std_pso_topo_gbest.png")

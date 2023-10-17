@@ -13,7 +13,7 @@ class OptimizationProblem:
 
 
 class AckleyFunction(OptimizationProblem):
-    def __init__(self, dimensions, lower_bound=-32.768, upper_bound=32.768, a=20, b=0.2, c=2*np.pi):
+    def __init__(self, dimensions, lower_bound=-30, upper_bound=30, a=20, b=0.2, c=2*np.pi):
         super().__init__(dimensions)
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
