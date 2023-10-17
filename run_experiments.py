@@ -42,7 +42,7 @@ def run_experiment(swarm_size, pso_type="standard", topology_type="gbest", file_
 
 
 # part6
-run_experiment(30, file_name="metrics_std_pso.png")
+# run_experiment(30, file_name="metrics_std_pso.png")
 # run_experiment(30, pso_type="inertia",
 #                file_name="metrics_std_pso_weight_adjust.png")
 
@@ -53,17 +53,17 @@ run_experiment(30, file_name="metrics_std_pso.png")
 # run_experiment(200, file_name="metrics_std_pso_swarm200.png")
 
 # # # # part8
-run_experiment(30, pso_type="inertia",
-               file_name="metrics_std_pso_weight_adjust.png")
+# run_experiment(30, pso_type="inertia",
+#                file_name="metrics_std_pso_weight_adjust.png")
 
 # # # part9
-# run_experiment(30, file_name="metrics_std_pso_topo_gbest.png")
-# run_experiment(30, topology_type="ring",
-#                file_name="metrics_std_pso_topo_ring.png")
-# run_experiment(30, topology_type="star",
-#                file_name="metrics_std_pso_topo_star.png")
-# run_experiment(30, topology_type="rand",
-#                file_name="metrics_std_pso_topo_rand.png")
+run_experiment(30, file_name="metrics_std_pso_topo_gbest.png")
+run_experiment(30, topology_type="ring",
+               file_name="metrics_std_pso_topo_ring.png")
+run_experiment(30, topology_type="star",
+               file_name="metrics_std_pso_topo_star.png")
+run_experiment(30, topology_type="rand",
+               file_name="metrics_std_pso_topo_rand.png")
 
 # # # part10
 # # # try 20 gbest inertia

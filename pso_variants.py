@@ -57,7 +57,7 @@ class PSO:
         self.swarm = [Particle(problem.get_dimensions(
         ), problem.lower_bound, problem.upper_bound) for _ in range(num_particles)]
         self.num_neighbors = num_neighbors
-        if self.topology == 'random':
+        if self.topology == 'rand':
             self.random_neighbourhood_connectivity = [np.random.choice(
                 self.num_particles, self.num_neighbors, replace=False) for _ in range(self.num_particles)]
         self.global_fitness = []
@@ -68,6 +68,7 @@ class PSO:
 
     def optimize(self):
         print('using standard pso')
+        print('using', self.topology)
         for i in range(self.max_iterations):
             best_fitness_this_iteration = float('inf')
 
@@ -107,7 +108,7 @@ class PSO:
                 elif self.topology == 'star':
                     best_position = StarTopology.get_best_position(
                         self, index)
-                elif self.topology == 'random':
+                elif self.topology == 'rand':
                     best_position = RandomNeighbourhoodConnectivity.get_best_position(
                         self, index)
                 else:
