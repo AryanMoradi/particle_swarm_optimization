@@ -1,58 +1,44 @@
-import random
-from optimization_problems import AckleyFunction
-
 
 class GlobalBestTopology:
-    def __init__(self, particles):
-        self.type = "gbest"
-        self.neighbour_list = []
-        for _ in range(len(particles)):
-            self.neighbour_list.append(range(len(particles)))
+    @staticmethod
+    def get_best_position(pso, particle_index):
+        return pso.global_best_position
 
 
 class RingTopology:
-    def __init__(self, particles):
-        self.type = "ring"
-        self.neighbour_list = []
+    @staticmethod
+    def get_best_position(pso, particle_index):
+        neighbors = list(range(particle_index - pso.num_neighbors,
+                         particle_index + pso.num_neighbors + 1))
+        neighbors = [i % pso.num_particles for i in neighbors]
 
-        self.neighbour_list.append([len(particles)-1, 1])
-        for i in range(1, len(particles)-1):
-            self.neighbour_list.append([i-1, i+1])
-
-        self.neighbour_list.append([len(particles)-2, 0])
+        best_fitness = float('inf')
+        best_position = None
+        for i in neighbors:
+            if pso.swarm[i].personal_best_fitness < best_fitness:
+                best_fitness = pso.swarm[i].personal_best_fitness
+                best_position = pso.swarm[i].personal_best_position.copy()
+        return best_position
 
 
 class StarTopology:
-    def __init__(self, particles):
-        self.update(particles)
-        self.type = "star"
-
-    def update(self, particles):
-        fitness_function = AckleyFunction(
-            dimensions=len(particles[0].position))
-        best_fitness = fitness_function.evaluate(particles[0].position)
-        current_best_index = 0
-        for i in range(1, len(particles)):
-            fitness = fitness_function.evaluate(particles[i].position)
-            if fitness < best_fitness:
-                best_fitness = fitness
-                current_best_index = i
-
-        self.neighbour_list = []
-
-        for i in range(len(particles)):
-            self.neighbour_list.append([i, current_best_index])
+    @staticmethod
+    def get_best_position(pso, particle_index):
+        if particle_index == 0:
+            return pso.global_best_position
+        else:
+            return pso.swarm[0].personal_best_position
 
 
 class RandomNeighbourhoodConnectivity:
-    def __init__(self, particles):
-        self.type = "rand"
-        self.update(particles)
+    @staticmethod
+    def get_best_position(pso, particle_index):
+        neighbors = pso.random_neighbourhood_connectivity[particle_index]
 
-    def update(self, particles):
-        self.neighbour_list = []
-
-        for particle in particles:
-            neighbour_indices = random.sample(
-                range(len(particles)), random.randint(0, len(particles) - 1))
-            self.neighbour_list.append(neighbour_indices)
+        best_fitness = float('inf')
+        best_position = None
+        for i in neighbors:
+            if pso.swarm[i].personal_best_fitness < best_fitness:
+                best_fitness = pso.swarm[i].personal_best_fitness
+                best_position = pso.swarm[i].personal_best_position.copy()
+        return best_position

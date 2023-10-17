@@ -1,155 +1,107 @@
 import numpy as np
 import random
 from statistics import stdev
-from optimization_problems import AckleyFunction
 from topologies import GlobalBestTopology, RingTopology, StarTopology, RandomNeighbourhoodConnectivity
+from optimization_problems import AckleyFunction
 
 
 class Particle:
-    def __init__(self, num_dimensions, position_range, velocity_range):
-        self.velocity = [
-            random.uniform(-velocity_range, velocity_range) for _ in range(num_dimensions)]
-        self.position = [
-            random.uniform(-position_range, position_range) for _ in range(num_dimensions)]
-        fitness_function = AckleyFunction(dimensions=num_dimensions)
-        self.best_fitness = fitness_function.evaluate(
-            self.position)  # Initialize with fitness value
-        self.best_position = self.position
-        self.best_neighbour_position = self.position
-        self.best_neighbour_fitness = self.best_fitness
+    def __init__(self, num_dimensions, lower_bound, upper_bound):
+        self.position = np.random.uniform(
+            lower_bound, upper_bound, num_dimensions)
+        self.velocity = np.random.uniform(-0.1, 0.1, num_dimensions)
+        self.personal_best_position = np.copy(self.position)
+        self.personal_best_fitness = float('inf')
+
+    def update_velocity(self, global_best_position, inertia_weight=0.5, cognitive_weight=1.5, social_weight=1.5):
+
+        e1 = np.random.rand(len(self.position))
+        e2 = np.random.rand(len(self.position))
+
+        cognitive_component = cognitive_weight * e1 * \
+            (self.personal_best_position - self.position)
+        social_component = social_weight * e2 * \
+            (global_best_position - self.position)
+
+        self.velocity = inertia_weight * self.velocity + \
+            cognitive_component + social_component
+
+    def update_position(self, lower_bound, upper_bound):
+        self.position = self.position + self.velocity
+        self.position = np.clip(self.position, lower_bound, upper_bound)
 
 
 # standard pso
 class PSO:
-    def __init__(self, problem, num_particles, max_iterations, topology, num_dimensions):
+    def __init__(self, problem, num_particles=30, max_iterations=1000, topology='gbest', num_neighbors=2):
         self.problem = problem
         self.num_particles = num_particles
         self.max_iterations = max_iterations
         self.topology = topology
-        self.num_dimensions = num_dimensions
-        self.global_best_position = None
+        self.global_best_position = np.random.uniform(
+            problem.lower_bound, problem.upper_bound, problem.get_dimensions())
         self.global_best_fitness = float('inf')
-
-    def initialize_particles(self):
-        fitness_function = AckleyFunction(dimensions=self.num_dimensions)
-        for particle in self.problem:
-            particle.best_position = particle.position
-            particle.best_fitness = fitness_function.evaluate(
-                particle.position)
-            if particle.best_fitness < self.global_best_fitness:
-                self.global_best_fitness = particle.best_fitness
-                self.global_best_position = particle.position
+        print(problem.get_dimensions())
+        self.swarm = [Particle(problem.get_dimensions(
+        ), problem.lower_bound, problem.upper_bound) for _ in range(num_particles)]
+        self.num_neighbors = num_neighbors
+        if self.topology == 'random':
+            self.random_neighbourhood_connectivity = [np.random.choice(
+                self.num_particles, self.num_neighbors, replace=False) for _ in range(self.num_particles)]
+        self.global_fitness = []
+        self.swarm_centre_of_mass = []
+        self.standard_deviation = []
+        self.velocity_vector_length = []
 
     def optimize(self):
-        fitness_function = AckleyFunction(dimensions=self.num_dimensions)
-        x = []
-        global_fitness = []
-        swarm_centre_of_mass = []
-        standard_deviation = []
-        velocity_vector_length = []
-
-        self.initialize_particles()
-
         for i in range(self.max_iterations):
+            best_fitness_this_iteration = float('inf')
+
             all_positions = []
             all_vectors = []
 
-            if self.topology.type == "rand":
-                self.topology.update(self.problem)
+            for particle in self.swarm:
+                fitness = self.problem.evaluate(particle.position)
+                all_positions.append(particle.position)
+                all_vectors.append(particle.velocity)
 
-            for particle in range(self.num_particles):
-                all_positions.append(self.problem[particle].position)
-                all_vectors.append(self.problem[particle].velocity)
-
-                fitness = fitness_function.evaluate(
-                    self.problem[particle].position)
-
-                if fitness < self.problem[particle].best_fitness:
-                    self.problem[particle].best_position = self.problem[particle].position
-                    self.problem[particle].best_fitness = fitness
+                if fitness < particle.personal_best_fitness:
+                    particle.personal_best_fitness = fitness
+                    particle.personal_best_position = particle.position.copy()
 
                 if fitness < self.global_best_fitness:
                     self.global_best_fitness = fitness
-                    self.global_best_position = self.problem[particle].position
+                    self.global_best_position = particle.position.copy()
 
-                if self.topology.type == "gbest":
-                    self.problem[particle].best_neighbour_position = self.global_best_position
-                    self.problem[particle].best_neighbour_fitness = self.global_best_fitness
+                best_fitness_this_iteration = min(
+                    best_fitness_this_iteration, fitness)
+
+            self.global_fitness.append(best_fitness_this_iteration)
+            center_of_mass = np.mean(all_positions, axis=0)
+            self.swarm_centre_of_mass.append(np.linalg.norm(center_of_mass))
+            self.standard_deviation.append(np.std(all_positions))
+            self.velocity_vector_length.append(
+                np.mean([np.linalg.norm(v) for v in all_vectors]))
+
+            for index, particle in enumerate(self.swarm):
+                if self.topology == 'gbest':
+                    best_position = GlobalBestTopology.get_best_position(
+                        self, index)
+                elif self.topology == 'ring':
+                    best_position = RingTopology.get_best_position(
+                        self, index)
+                elif self.topology == 'star':
+                    best_position = StarTopology.get_best_position(
+                        self, index)
+                elif self.topology == 'random':
+                    best_position = RandomNeighbourhoodConnectivity.get_best_position(
+                        self, index)
                 else:
-                    for neighbour in self.topology.neighbour_list[particle]:
-                        fitness = fitness_function.evaluate(
-                            self.problem[neighbour].position)
-                        if fitness < self.problem[particle].best_neighbour_fitness:
-                            self.problem[particle].best_neighbour_position = self.problem[neighbour].position
-                            self.problem[particle].best_neighbour_fitness = fitness
-
-                self.update(particle)
-
-            if self.topology.type == "star":
-                self.topology.update(self.problem)
-
-            x.append(i + 1)
-            global_fitness.append(self.global_best_fitness)
-
-            mean = np.average(all_positions, axis=0)
-            swarm_centre_of_mass.append(
-                np.linalg.norm(self.global_best_position - mean))
-
-            distances = np.linalg.norm(all_positions - mean, axis=1)
-            standard_deviation.append(stdev(distances))
-
-            mean_velocity = np.average(all_vectors, axis=0)
-            sum_velocity = np.sum(np.abs(mean_velocity))
-            velocity_vector_length.append(sum_velocity / self.num_dimensions)
-
-            if len(global_fitness) > 20 and self.global_best_fitness == global_fitness[i-19]:
+                    raise ValueError(
+                        f"Topology {self.topology} is not supported")
+                particle.update_velocity(best_position)
+                particle.update_position(
+                    self.problem.lower_bound, self.problem.upper_bound)
+            if len(self.global_fitness) > 50 and best_fitness_this_iteration == self.global_fitness[i-49]:
                 break
-
-        return x, global_fitness, swarm_centre_of_mass, standard_deviation, velocity_vector_length
-
-    def update(self, particle_index):
-        particle = self.problem[particle_index]
-        # Vid = Vid + Ce1(Pid-Xid) + Ce2(Pgd-Xid)
-        e1 = [random.uniform(0, 1) for i in range(self.num_dimensions)]
-        e2 = [random.uniform(0, 1) for i in range(self.num_dimensions)]
-        for d in range(self.num_dimensions):
-            particle.velocity[d] = particle.velocity[d] + 2*e1[d]*(particle.best_position[d]-particle.position[d]) + 2*e2[d]*(
-                particle.best_neighbour_position[d]-particle.position[d])
-
-            # Update position
-            particle.position[d] = particle.position[d] + particle.velocity[d]
-
-            # Check boundary conditions and adjust if necessary
-            fitness_function = AckleyFunction(dimensions=self.num_dimensions)
-            lower_bound = fitness_function.lower_bound
-            upper_bound = fitness_function.upper_bound
-
-            if particle.position[d] < lower_bound:
-                particle.position[d] = lower_bound
-            elif particle.position[d] > upper_bound:
-                particle.position[d] = upper_bound
-
-        self.problem[particle_index] = particle
-
-
-# inertia weight pso
-class inertia_weight_PSO(PSO):
-    # overrride update function
-    def update(self, particle_index):
-        particle = self.problem[particle_index]
-        e1 = [random.uniform(0, 1) for _ in range(self.num_dimensions)]
-        e2 = [random.uniform(0, 1) for _ in range(self.num_dimensions)]
-        inertia_weight = 0.5  # Inertia weight
-        cognitive_weight = 1.5  # Cognitive component weight
-        social_weight = 1.5  # Social component weight
-
-        for d in range(self.num_dimensions):
-            inertia_term = inertia_weight * particle.velocity[d]
-            cognitive_component = cognitive_weight * e1[d] * \
-                (particle.best_position[d] - particle.position[d])
-            social_component = social_weight * e2[d] * \
-                (self.global_best_position[d] - particle.position[d])
-            particle.velocity[d] = inertia_term + \
-                cognitive_component + social_component
-            particle.position[d] = particle.position[d] + particle.velocity[d]
-        self.problem[particle_index] = particle
+        return range(1, len(self.global_fitness)+1)

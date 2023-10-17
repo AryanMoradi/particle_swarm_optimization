@@ -3,22 +3,6 @@ import numpy as np
 import distinctipy
 
 
-def gather_metrics(swarm):
-    best_fitness = swarm.global_best_fitness
-    center_of_mass = np.mean([particle.position for particle in swarm], axis=0)
-    distance_to_optimum = np.linalg.norm(center_of_mass)
-    std_dev_positions = np.std([particle.position for particle in swarm])
-    mean_velocity = np.mean([np.linalg.norm(particle.velocity)
-                            for particle in swarm])
-
-    return {
-        "best_fitness": best_fitness,
-        "distance_to_optimum": distance_to_optimum,
-        "std_dev_positions": std_dev_positions,
-        "mean_velocity": mean_velocity
-    }
-
-
 def plot_metrics(metrics_data_list):
     plt.figure()
     colors = distinctipy.get_colors(len(metrics_data_list))
