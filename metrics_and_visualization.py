@@ -1,62 +1,54 @@
 import matplotlib.pyplot as plt
-import distinctpy
+import numpy as np
+import distinctipy
 
-def plot_metrics(metrics_data):
-    pass
 
-def gather_metrics(swarm):
-    pass
+def plot_metrics(metrics_data_list):
+    plt.figure()
+    colors = distinctipy.get_colors(len(metrics_data_list))
 
-def run_optimization(swarm_class, problem, num_particles, max_iterations, topology, runs=10):
-    pass
+    fig, ax = plt.subplots(2, 2, figsize=(12, 8))
 
-num_iterations = 100
-num_runs = 3
+    for i, metrics_data in enumerate(metrics_data_list):
+        color = colors[i]
+        label = f"Run {i + 1}"
 
-fitness_values = [np.random.rand(num_iterations) for _ in range(num_runs)]
-swarm_distance_to_optimum = [np.random.rand(num_iterations) for _ in range(num_runs)]
-swarm_std_dev = [np.random.rand(num_iterations) for _ in range(num_runs)]
-mean_velocity_length = [np.random.rand(num_iterations) for _ in range(num_runs)]
+        # Plot best fitness value vs iterations
+        ax[0, 0].plot(metrics_data["iterations"],
+                      metrics_data["best_fitness"], label=label, color=color)
 
-# Create a figure with four sub-figures
-fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+        # Plot distance to global optimum vs iterations
+        ax[0, 1].plot(metrics_data["iterations"],
+                      metrics_data["distance_to_optimum"], label=label, color=color)
 
-# Sub-figure 1: Current best fitness value over iterations
-for i in range(num_runs):
-    axes[0, 0].plot(range(num_iterations), fitness_values[i], label=f'Run {i+1}')
+        # Plot standard deviation of particle positions vs iterations
+        ax[1, 0].plot(metrics_data["iterations"],
+                      metrics_data["std_dev_positions"], label=label, color=color)
 
-axes[0, 0].set_title('Current Best Fitness Value Over Iterations')
-axes[0, 0].set_xlabel('Iterations')
-axes[0, 0].set_ylabel('Fitness Value')
-axes[0, 0].legend()
+        # Plot mean velocity vs iterations
+        ax[1, 1].plot(metrics_data["iterations"],
+                      metrics_data["mean_velocity"], label=label, color=color)
 
-# Sub-figure 2: Distance of swarm center of mass to global optimum
-for i in range(num_runs):
-    axes[0, 1].plot(range(num_iterations), swarm_distance_to_optimum[i], label=f'Run {i+1}')
+    ax[0, 0].set_title("Best Fitness vs Iterations")
+    ax[0, 0].set_xlabel("Iterations")
+    ax[0, 0].set_ylabel("Best Fitness")
 
-axes[0, 1].set_title('Distance to Global Optimum Over Iterations')
-axes[0, 1].set_xlabel('Iterations')
-axes[0, 1].set_ylabel('Distance')
-axes[0, 1].legend()
+    ax[0, 1].set_title("Distance to Global Optimum vs Iterations")
+    ax[0, 1].set_xlabel("Iterations")
+    ax[0, 1].set_ylabel("Distance to Optimum")
 
-# Sub-figure 3: Standard deviation of particle positions
-for i in range(num_runs):
-    axes[1, 0].plot(range(num_iterations), swarm_std_dev[i], label=f'Run {i+1}')
+    ax[1, 0].set_title(
+        "Standard Deviation of Particle Positions vs Iterations")
+    ax[1, 0].set_xlabel("Iterations")
+    ax[1, 0].set_ylabel("Std Dev of Positions")
 
-axes[1, 0].set_title('Standard Deviation of Particle Positions')
-axes[1, 0].set_xlabel('Iterations')
-axes[1, 0].set_ylabel('Standard Deviation')
-axes[1, 0].legend()
+    ax[1, 1].set_title("Mean Velocity vs Iterations")
+    ax[1, 1].set_xlabel("Iterations")
+    ax[1, 1].set_ylabel("Mean Velocity")
 
-# Sub-figure 4: Mean length of velocity vectors
-for i in range(num_runs):
-    axes[1, 1].plot(range(num_iterations), mean_velocity_length[i], label=f'Run {i+1}')
+    ax[0, 0].legend()
+    ax[0, 1].legend()
+    ax[1, 0].legend()
+    ax[1, 1].legend()
 
-axes[1, 1].set_title('Mean Length of Velocity Vectors Over Iterations')
-axes[1, 1].set_xlabel('Iterations')
-axes[1, 1].set_ylabel('Mean Velocity Length')
-axes[1, 1].legend()
-
-# Adjust layout and display the figure
-plt.tight_layout()
-plt.show()
+    plt.tight_layout()
